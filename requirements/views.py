@@ -1,9 +1,11 @@
 # views.py
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required  # Import the login_required decorator
 from .forms import JobRequirementForm
 from .models import InterviewAnswer, JobRequirement, Candidate
 from .utils.recruitment_system import RecruitmentSystem
 
+@login_required  # Apply the login_required decorator to restrict access to the view
 def job_application(request, job_id):
     job = JobRequirement.objects.get(pk=job_id)
     interview_questions = RecruitmentSystem.interview_questions()
@@ -25,7 +27,7 @@ def job_application(request, job_id):
 
     return render(request, 'requirements/job_application.html', context)
 
-
+@login_required  # Apply the login_required decorator to restrict access to the view
 def requirement_form(request):
     if request.method == 'POST':
         form = JobRequirementForm(request.POST)

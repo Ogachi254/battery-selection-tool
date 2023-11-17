@@ -11,7 +11,7 @@
                         <h2 class="text-center">Job Requirement Form</h2>
                     </div>
                     <div class="card-body">
-                        <form method="post" action="{% url 'requirement_form' %}">
+                        <form method="post" action="{% url 'requirement_form' %}" enctype="multipart/form-data">
                             {% csrf_token %}
                             {{ form.as_p }}
                             <div class="text-center mt-3">
@@ -27,4 +27,4 @@
 
 {% block footer %}
 {% include 'footer.html' %}
-{% endblock %}  
+{% endblock %}
