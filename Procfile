@@ -1,1 +1,1 @@
-web: waitress-serve --port $PORT selection_tool.wsgi.application
+web: waitress-serve --port $PORT selection_tool.wsgi:application
