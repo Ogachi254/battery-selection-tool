@@ -1,0 +1,278 @@
+{% extends 'base.html' %}
+
+{% block title %}Log In{% endblock title %}
+
+{% block head %}
+<style>
+    body {
+      background-color: #f8f9fa;
+      overflow: auto; /* Enable scrolling */
+    }
+    .card-header {
+      background-color: #004d7a;
+      color: #fff;
+    }
+  .btn-primary {
+    background-color: #00ff00; /* Green color */
+    border-color: #00ff00;
+    display: block;
+    margin: 0 auto; /* Center the button horizontally */
+  }
+
+
+    .btn-primary:hover {
+      background-color: #003e61;
+      border-color: #003e61;
+    }
+    .login-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh; /* Use min-height to allow scrolling */
+      padding-bottom: 60px; /* Adjust the padding to make space for the footer */
+    }
+    .login-card {
+      max-width: 400px;
+      animation: slide-up 0.5s ease-in-out;
+      margin: 0 auto;
+      transform: translateY(-50%);
+      animation-fill-mode: forwards;
+    }
+    @keyframes slide-up {
+      0% {
+        opacity: 0;
+        transform: translateY(50%);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animated-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+      background-color: #800080; /* Purple background */
+    }
+    .animated-background::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0)); /* Transparent gradient */
+      animation: animatedOverlay 8s ease-in-out infinite;
+    }
+    @keyframes animatedOverlay {
+      0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
+      100% {
+        transform: translate(-50%, -50%) rotate(-360deg);
+      }
+    }
+    .animated-element {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      animation: moveElement 8s ease-in-out infinite;
+      opacity: 0.5;
+    }
+    @keyframes moveElement {
+      0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
+      100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+      }
+    }
+
+    /* Additional animations */
+    .animated-element-left {
+      background-color: #ff0000; /* Red color */
+      animation-name: moveLeft;
+    }
+    .animated-element-right {
+      background-color: #00ff00; /* Green color */
+      animation-name: moveRight;
+    }
+    .animated-element-center {
+      background-color: #0000ff; /* Blue color */
+      animation-name: moveCenter;
+    }
+    .animated-element-bottom {
+      background-color: #ffff00; /* Yellow color */
+      animation-name: moveBottom;
+    }
+    .animated-element-top {
+      background-color: #ff00ff; /* Magenta color */
+      animation-name: moveTop;
+    }
+
+    @keyframes moveLeft {
+      0% {
+        left: 100%;
+        opacity: 0;
+      }
+      50% {
+        left: 50%;
+        opacity: 1;
+      }
+      100% {
+        left: 0%;
+        opacity: 0;
+      }
+    }
+
+    @keyframes moveRight {
+      0% {
+        left: 0%;
+        opacity: 0;
+      }
+      50% {
+        left: 50%;
+        opacity: 1;
+      }
+      100% {
+        left: 100%;
+        opacity: 0;
+      }
+    }
+
+    @keyframes moveCenter {
+      0% {
+        top: -100%;
+        opacity: 0;
+      }
+      50% {
+        top: 0%;
+        opacity: 1;
+      }
+      100% {
+        top: 100%;
+        opacity: 0;
+      }
+    }
+
+    @keyframes moveBottom {
+      0% {
+        top: 100%;
+        opacity: 0;
+      }
+      50% {
+        top: 50%;
+        opacity: 1;
+      }
+      100% {
+        top: 0%;
+        opacity: 0;
+      }
+    }
+
+    @keyframes moveTop {
+      0% {
+        top: 0%;
+        opacity: 0;
+      }
+      50% {
+        top: 50%;
+        opacity: 1;
+      }
+      100% {
+        top: 100%;
+        opacity: 0;
+      }
+    }
+  .error-message {
+    background-color: #fff;
+    color: #ff0000;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    text-align: center;
+  }
+</style>
+
+<script>
+  function togglePasswordVisibility() {
+    const passwordField = document.getElementById("id_password");
+    const showPasswordCheckbox = document.getElementById("show-password-checkbox");
+
+    if (showPasswordCheckbox.checked) {
+      passwordField.type = "text";
+    } else {
+      passwordField.type = "password";
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function() {
+    const showPasswordCheckbox = document.getElementById("show-password-checkbox");
+    const passwordField = document.getElementById("id_password");
+
+    showPasswordCheckbox.checked = true;
+    passwordField.type = "text";
+
+    showPasswordCheckbox.addEventListener("change", togglePasswordVisibility);
+  });
+</script>
+{% endblock head %}
+
+{% block content %}
+<div class="animated-background">
+  <div class="animated-element animated-element-left"></div>
+  <div class="animated-element animated-element-right"></div>
+  <div class="animated-element animated-element-center"></div>
+  <div class="animated-element animated-element-bottom"></div>
+  <div class="animated-element animated-element-top"></div>
+</div>
+
+<div class="login-container">
+  <div class="login-card">
+    <div class="card">
+      <h2 class="card-header">Log In</h2>
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="form-group row">
+            <div class="col-12">
+              {{ form.username.label_tag }}
+              {{ form.username }}
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-12">
+              {{ form.password.label_tag }}
+              {{ form.password }}
+              <div class="form-check mt-2">
+                <input class="form-check-input" type="checkbox" id="show-password-checkbox" checked>
+                <label class="form-check-label" for="show-password-checkbox">
+                  Show password
+                </label>
+              </div>
+            </div>
+          </div>
+          {% if form.errors %}
+          <div class="error-message">
+            <p>You have entered the wrong password. Please try again.</p>
+          </div>
+          {% endif %}
+          <div class="form-group row">
+            <div class="col-12">
+              <button class="btn btn-primary" type="submit">Log In</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block footer %}
+{% include 'footer.html' %}
+{% endblock %}

@@ -1,0 +1,115 @@
+{% load static %}
+
+<style>
+  /* Existing styles... */
+
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+  }
+
+  .navbar-brand img {
+    margin-right: 5px;
+  }
+
+  .brand-text {
+    color: #c0392b;
+  }
+
+  .navbar-nav {
+    margin-left: auto;
+  }
+
+  .nav-link {
+    margin: 0 10px;
+  }
+
+  .order-link {
+    margin-left: 20px;
+    background-color: #003399;
+  }
+
+  .order-link:hover {
+    background-color: #003399; /* Set the hover color if desired */
+  }
+
+  .nav-item:last-child .nav-link {
+    margin-right: 0;
+  }
+
+  /* Added styles for compressed list */
+  .compressed-list .nav-link {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .compressed-list .navbar-nav {
+    flex-direction: row;
+  }
+
+  @media (max-width: 767.98px) {
+    .signup-link {
+      margin-top: 16px;
+    }
+
+    .navbar-nav {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .nav-item {
+      margin-bottom: 10px;
+    }
+
+    .order-link {
+      margin-left: 0;
+      margin-top: 10px;
+    }
+  }
+</style>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-3">
+  <a class="navbar-brand" href="#">
+      <img src="{% static 'images/logo.jpg' %}" alt="Groceries store Logo" width="30" height="30" class="d-inline-block align-text-top">
+      <span class="brand-text">Groceries store</span>
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse"
+          data-target="#navbarNav" aria-controls="navbarNav"
+          aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto{% if user.is_authenticated %} compressed-list{% endif %}">
+          <li class="nav-item">
+              <a class="nav-link home-link" href="{% url 'home' %}">Home</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link about-link" href="{% url 'about' %}">About</a>
+          </li>
+
+          {% if user.is_authenticated %}
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+              </li>
+          {% else %}
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'login' %}">Log In</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link signup-link" href="{% url 'signup' %}">Sign Up</a>
+              </li>
+          {% endif %}
+
+          <!-- Add the following list item for the requirements form -->
+          <li class="nav-item">
+              <a class="nav-link" href="{% url 'requirement_form' %}">Requirements Form</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'job_application' job_id=1 %}">Job Application</a>
+            <!-- Adjust job_id as needed or remove it if not applicable -->
+        </li>
+      </ul>
+  </div>
+</nav>

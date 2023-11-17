@@ -1,0 +1,36 @@
+<!-- recruitment/templates/recruitment/job_application.html -->
+{% extends 'base.html' %}
+
+{% block title %}{{ job.job_title }} Job Application{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="text-center">{{ job.job_title }} Job Application</h2>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" action="{% url 'job_application' job.id %}">
+                            {% csrf_token %}
+
+                            {% for question in interview_questions %}
+                                <div class="mb-3">
+                                    <label for="answer_{{ forloop.counter }}" class="form-label">{{ question }}</label>
+                                    <textarea class="form-control" name="answer_{{ forloop.counter }}" required></textarea>
+                                </div>
+                            {% endfor %}
+
+                            <button type="submit" class="btn btn-success">Submit Application</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+{% include 'footer.html' %}
+{% endblock %}

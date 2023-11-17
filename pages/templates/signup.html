@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock title %}
+
+{% block head %}
+<style>
+  body {
+    background-color: #007bff; /* Blue background */
+  }
+
+  .card {
+    margin-top: 5vh; /* Adjust the top margin for visibility */
+    margin-bottom: 5vh; /* Adjust the bottom margin for visibility */
+    border: 2px solid black; /* Add a black border around the card */
+    padding: 10px; /* Add some padding inside the card */
+    text-align: center; /* Center align the card content */
+  }
+
+  .card:first-child {
+    border-top-left-radius: 10px; /* Rounded border on the top left corner of the first card */
+    border-top-right-radius: 10px; /* Rounded border on the top right corner of the first card */
+  }
+
+  .card:last-child {
+    border-bottom-left-radius: 10px; /* Rounded border on the bottom left corner of the last card */
+    border-bottom-right-radius: 10px; /* Rounded border on the bottom right corner of the last card */
+  }
+
+  .card-title {
+    color: #333; /* Set the title color */
+    font-size: 24px; /* Set the title font size */
+    margin-bottom: 20px; /* Add some space below the title */
+  }
+
+  .btn-register {
+    font-size: 14px; /* Set the button font size */
+    padding: 5px 10px; /* Adjust the button padding */
+    width: fit-content; /* Resize the button to fit its content */
+    margin: 10px auto; /* Center align the button and add margin */
+  }
+
+  /* Customize form input and label styles */
+  form input[type="text"],
+  form input[type="email"],
+  form input[type="password"] {
+    border: 1px solid black; /* Set the input border to black */
+    font-weight: bold; /* Make the input text bold */
+  }
+
+  form label {
+    font-weight: bold; /* Make the label text bold */
+  }
+</style>
+{% endblock head %}
+
+{% block content %}
+<div class="card w-75 mx-auto mt-5 bg-light">
+  <h2 class="card-header bg-primary text-white card-title">Register</h2>
+  <div class="card-body">
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-group row">
+        <label for="{{ form.username.id_for_label }}" class="col-sm-4 col-form-label font-weight-bold">Username</label>
+        <div class="col-sm-8">
+          {{ form.username }}
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="{{ form.email.id_for_label }}" class="col-sm-4 col-form-label font-weight-bold">Email address</label>
+        <div class="col-sm-8">
+          {{ form.email }}
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="{{ form.password1.id_for_label }}" class="col-sm-4 col-form-label font-weight-bold">Password</label>
+        <div class="col-sm-8">
+          {{ form.password1 }}
+          <small id="passwordHelpBlock" class="form-text text-muted">
+            Your password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.
+          </small>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="{{ form.password2.id_for_label }}" class="col-sm-4 col-form-label font-weight-bold">Confirm password</label>
+        <div class="col-sm-8">
+          {{ form.password2 }}
+          {% if form.errors.password2 %}
+            <p class="text-danger">{{ form.errors.password2 }}</p>
+          {% endif %}
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-12">
+          <button type="submit" class="btn btn-primary btn-block btn-register">Register</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  const passwordField = document.getElementById('id_password1');
+  const confirmPasswordField = document.getElementById('id_password2');
+
+  // Add an event listener to the password field to check its validity on every keyup event
+  passwordField.addEventListener('keyup', () => {
+    const password = passwordField.value;
+    const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+}{"':;?/>.<,])(?!.*\s).{8,}$/;
+    const passwordHelpBlock = document.getElementById('passwordHelpBlock');
+
+    if (passwordPattern.test(password)) {
+      passwordField.setCustomValidity('');
+      passwordHelpBlock.classList.remove('text-danger');
+      passwordHelpBlock.classList.add('text-success');
+    } else {
+      passwordField.setCustomValidity('Your password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.');
+      passwordHelpBlock.classList.remove('text-success');
+      passwordHelpBlock.classList.add('text-danger');
+    }
+  });
+
+  // Add an event listener to the confirm password field to check its validity on every keyup event
+  confirmPasswordField.addEventListener('keyup', () => {
+    const password = passwordField.value;
+    const confirmPassword = confirmPasswordField.value;
+    const confirmPasswordError = document.getElementById('confirmPasswordError');
+
+    if (password === confirmPassword) {
+      confirmPasswordField.setCustomValidity('');
+      if (confirmPasswordError) {
+        confirmPasswordError.style.display = 'none';
+      }
+    } else {
+      confirmPasswordField.setCustomValidity('Passwords do not match');
+      if (confirmPasswordError) {
+        confirmPasswordError.style.display = 'block';
+      } else {
+        const errorElement = document.createElement('p');
+        errorElement.id = 'confirmPasswordError';
+        errorElement.classList.add('text-danger');
+        errorElement.textContent = 'Passwords do not match';
+        confirmPasswordField.parentNode.appendChild(errorElement);
+      }
+    }
+  });
+</script>
+{% endblock content %}
+
+{% block footer %}
+{% include 'footer.html' %}
+{% endblock %}
